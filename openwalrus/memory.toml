@@ -5,5 +5,5 @@ name = "memory"
 description = "Graph memory with entity and relation tracking"
 kind = "hook"
 command = "walrus-memory"
-install = { command = "cargo", args = ["install", "walrus-memory"] }
+install = { command = "bash", args = ["-c", "curl -fsSL openwalrus.xyz/install | sh -s -- --yes --service memory"] }
 restart = "on_failure"

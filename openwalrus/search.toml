@@ -5,5 +5,5 @@ name = "search"
 description = "Meta-search aggregator (DuckDuckGo, Wikipedia)"
 kind = "hook"
 command = "walrus-search"
-install = { command = "cargo", args = ["install", "walrus-search"] }
+install = { command = "bash", args = ["-c", "curl -fsSL openwalrus.xyz/install | sh -s -- --yes --service search"] }
 restart = "on_failure"

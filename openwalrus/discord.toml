@@ -5,6 +5,6 @@ name = "discord"
 description = "Discord bot gateway for agents"
 kind = "client"
 command = "walrus-discord"
-install = { command = "cargo", args = ["install", "walrus-gateway"] }
+install = { command = "bash", args = ["-c", "curl -fsSL openwalrus.xyz/install | sh -s -- --yes --service discord"] }
 restart = "on_failure"
 config = { discord = { token = "" } }
