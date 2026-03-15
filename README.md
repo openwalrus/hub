@@ -1,6 +1,6 @@
 # Walrus Hub
 
-A community registry for AI agent resources — MCP servers, skills, agents, prompts, and tools.
+A community registry for AI agent resources — MCP servers, skills, services, agents, prompts, and tools.
 
 Resources are indexed as `scope/config.toml` files in this repository. Anyone can add resources by opening a PR.
 
@@ -10,7 +10,7 @@ Each resource lives at `<scope>/<config>.toml`:
 
 ```
 microsoft/playwright.toml
-anthropic/claude.toml
+openwalrus/memory.toml
 my-org/my-tool.toml
 ```
 
@@ -20,25 +20,55 @@ my-org/my-tool.toml
 
 ```toml
 [package]
-name = "playwright"
+name = "my-package"
 
-[mcp_servers.playwright]
-description = "Playwright MCP server"
+[mcp_servers.my-mcp]
+description = "My MCP server"
 command = "npx"
-args = ["-y", "@playwright/mcp"]
-keywords = ["playwright", "mcp"]
+args = ["-y", "@my-org/mcp"]
+keywords = ["mcp"]
 
-[skills.playwright-cli]
-description = "CLI for common Playwright actions. Record and generate Playwright code, inspect selectors and take screenshots."
-repo = "https://github.com/microsoft/playwright-cli"
-path = "skills/playwright-cli"
+[skills.my-skill]
+description = "A downloadable skill."
+repo = "https://github.com/my-org/my-skill"
+path = "skills/my-skill"
+
+[services.my-service]
+description = "A managed WHS service"
+kind = "hook"                           # hook | client | process
+command = "my-service"                  # binary name or path
+install = { command = "cargo", args = ["install", "my-service"] }
+restart = "on_failure"                  # never | on_failure | always
+config = {}                             # opaque JSON forwarded to the service
+
+[agents.my-agent]
+description = "An agent with a bundled prompt."
+prompt = "prompts/my-agent.md"
+skills = ["my-skill"]
 ```
 
-Supported sections: `mcp_servers`, `skills`, `agents`.
+Supported sections: `mcp_servers`, `skills`, `services`, `agents`.
 
-## Example
+### Services
 
-[microsoft/playwright.toml](microsoft/playwright.toml) — MCP server and CLI skill for browser automation with Playwright.
+Services are external processes managed by the walrus daemon. The `install` field specifies how to install the service binary — it is executed during `walrus hub install` and not written to `walrus.toml`.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `description` | yes | Human-readable description |
+| `kind` | no | `hook` (default), `client`, or `process` |
+| `command` | yes | Binary name or path to execute |
+| `install` | no | `{ command, args }` — install command run during hub install |
+| `restart` | no | `never` (default), `on_failure`, or `always` |
+| `config` | no | Opaque JSON forwarded to the service via WHS |
+
+## Examples
+
+- [microsoft/playwright.toml](microsoft/playwright.toml) — MCP server and CLI skill for browser automation with Playwright.
+- [openwalrus/memory.toml](openwalrus/memory.toml) — Graph memory service with entity and relation tracking.
+- [openwalrus/search.toml](openwalrus/search.toml) — Meta-search aggregator (DuckDuckGo, Wikipedia).
+- [openwalrus/telegram.toml](openwalrus/telegram.toml) — Telegram bot gateway for agents.
+- [openwalrus/discord.toml](openwalrus/discord.toml) — Discord bot gateway for agents.
 
 ## Add a Resource
 

@@ -1,0 +1,10 @@
+[package]
+name = "telegram"
+
+[services.telegram]
+description = "Telegram bot gateway for agents"
+kind = "client"
+command = "walrus-telegram"
+install = { command = "bash", args = ["-c", "curl -fsSL openwalrus.xyz/install | sh -s -- --yes --service telegram"] }
+restart = "on_failure"
+config = { telegram = { token = "" } }
